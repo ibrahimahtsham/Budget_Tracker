@@ -3,6 +3,7 @@ package com.siamax.budgettracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
@@ -73,22 +74,6 @@ public class addTransaction extends AppCompatActivity {
             }
         });
 
-        descriptionInput.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                if(!descriptionInput.equals("")){
-                    descriptionLayout.setError(null);
-                }
-            }
-        });
-
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +87,19 @@ public class addTransaction extends AppCompatActivity {
                 if(amtInpt.isEmpty()){
                     amountLayout.setError("Field can't be empty");
                 }
-                if(dscInpt.isEmpty()){
-                    descriptionLayout.setError("Field can't be empty");
+
+                if(!lblInpt.isEmpty() && !amtInpt.isEmpty() && dscInpt.isEmpty()){
+
+                    database myDB = new database(addTransaction.this);
+
+                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt), "");
+
+                }
+                else if(!lblInpt.isEmpty() && !amtInpt.isEmpty() && !dscInpt.isEmpty()){
+
+                    database myDB = new database(addTransaction.this);
+                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt), dscInpt);
+
                 }
 
             }
@@ -114,7 +110,8 @@ public class addTransaction extends AppCompatActivity {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(addTransaction.this, dashboard.class);
+                startActivity(intent);
             }
         });
 

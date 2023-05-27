@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BudgetTracker"
         tools:targetApi="31">
         <activity
+            android:name=".updateTransaction"
+            android:exported="false" />
+        <activity
             android:name=".addTransaction"
             android:exported="false" />
         <activity
@@ -24,9 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login"></activity>
-        <activity android:name=".signUp"></activity>
-        <activity android:name=".dashboard"></activity>
+        <activity android:name=".login" />
+        <activity android:name=".signUp" />
+        <activity android:name=".dashboard" />
     </application>
 
 </manifest>

@@ -1,10 +1,12 @@
 package com.siamax.budgettracker;
 
 public class transactions {
+    int id;
     String label;
     Double amount;
 
-    public transactions(String label, Double amount) {
+    public transactions(int id, String label, Double amount) {
+        this.id = id;
         this.label = label;
         this.amount = amount;
     }
@@ -15,5 +17,9 @@ public class transactions {
 
     public Double getAmount() {
         return amount;
+    }
+
+    public int getId() {
+        return id;
     }
 }

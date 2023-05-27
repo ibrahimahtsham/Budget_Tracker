@@ -7,7 +7,7 @@
     tools:context=".addTransaction">
 
     <ImageButton
-        android:id="@+id/closeBtn"
+        android:id="@+id/edit_closeBtn"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_margin="12dp"
@@ -26,17 +26,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/labelLayout"
+            android:id="@+id/edit_labelLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:hint="Transaction Name*"
+            android:hint="Edit Transaction Name"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/labelInput"
+                android:id="@+id/edit_labelInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/label_selector"
@@ -48,17 +48,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/amountLayout"
+            android:id="@+id/edit_amountLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:hint="Amount*"
+            android:hint="Edit Amount"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/amountInput"
+                android:id="@+id/edit_amountInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/money_selector"
@@ -70,17 +70,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/descriptionLayout"
+            android:id="@+id/edit_descriptionLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:hint="Description"
+            android:hint="Edit Description"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/descriptionInput"
+                android:id="@+id/edit_descriptionInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/description_selector"
@@ -92,10 +92,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/addTransactionBtn"
+            android:id="@+id/updateTransactionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Transaction"
+            android:text="Update Transaction"
             android:textAlignment="center"
             android:textSize="16dp"
             android:textStyle="bold"

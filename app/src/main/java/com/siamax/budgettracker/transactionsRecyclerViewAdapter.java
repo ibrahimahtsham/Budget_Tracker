@@ -1,12 +1,16 @@
 package com.siamax.budgettracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +18,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class transactionsRecyclerViewAdapter extends RecyclerView.Adapter<transactionsRecyclerViewAdapter.myViewHolder> {
+public class transactionsRecyclerViewAdapter extends
+        RecyclerView.Adapter<transactionsRecyclerViewAdapter.myViewHolder> {
 
     Context context;
     ArrayList<transactions> transactionsList;
@@ -26,7 +31,8 @@ public class transactionsRecyclerViewAdapter extends RecyclerView.Adapter<transa
 
     @NonNull
     @Override
-    public transactionsRecyclerViewAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public transactionsRecyclerViewAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                                           int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recyclerview_row, parent, false);
 
@@ -34,7 +40,9 @@ public class transactionsRecyclerViewAdapter extends RecyclerView.Adapter<transa
     }
 
     @Override
-    public void onBindViewHolder(@NonNull transactionsRecyclerViewAdapter.myViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull transactionsRecyclerViewAdapter.myViewHolder holder,
+                                 int position) {
+
         holder.label.setText(transactionsList.get(position).getLabel());
         holder.amount.setText(transactionsList.get(position).getAmount()+"$");
         if(transactionsList.get(position).getAmount()>=0){
@@ -42,6 +50,14 @@ public class transactionsRecyclerViewAdapter extends RecyclerView.Adapter<transa
         }else{
             holder.amount.setTextColor(ContextCompat.getColor(context, R.color.red));
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, updateTransaction.class);
+                intent.putExtra("id",transactionsList.get(holder.getAdapterPosition()).getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,6 +69,7 @@ public class transactionsRecyclerViewAdapter extends RecyclerView.Adapter<transa
 
         TextView label;
         TextView amount;
+
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -2,11 +2,11 @@ package com.siamax.budgettracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,12 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class dashboard extends AppCompatActivity {
 
     TextView welcomeText;
     FloatingActionButton addBtn;
+
+    TextView balance;
+    TextView budget;
+    TextView expense;
+
+    database db;
+    ArrayList<String> transaction_id, transaction_label, transaction_amount;
+
 
     ArrayList<transactions> transactionsList = new ArrayList<>();
 
@@ -30,11 +37,40 @@ public class dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
 
+        db = new database(dashboard.this);
+        transaction_id = new ArrayList<>();
+        transaction_label = new ArrayList<>();
+        transaction_amount = new ArrayList<>();
+
+        balance = (TextView) findViewById(R.id.balance);
+        budget = (TextView) findViewById(R.id.budget);
+        expense = (TextView) findViewById(R.id.expense);
+
+        storeDataInArrays();
+
+        Double Dbudget = 0.0;
+        Double Dexpense = 0.0;
+        Double Dbalance = 0.0;
+
+        for(int i = 0; i < transaction_amount.size(); i++){
+            Dbalance += Double.parseDouble(transaction_amount.get(i));
+            if(Double.parseDouble(transaction_amount.get(i))>=0){
+                Dbudget += Double.parseDouble(transaction_amount.get(i));
+            }else{
+                Dexpense += Double.parseDouble(transaction_amount.get(i));
+            }
+        }
+
+        balance.setText(Dbalance.toString());
+        budget.setText(Dbudget.toString());
+        expense.setText(Dexpense.toString());
+
         RecyclerView recyclerView = findViewById(R.id.recycleview);
 
         setTransactionsList();
 
-        transactionsRecyclerViewAdapter adapter = new transactionsRecyclerViewAdapter(this, transactionsList);
+        transactionsRecyclerViewAdapter adapter = new transactionsRecyclerViewAdapter(this,
+                transactionsList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -57,11 +93,24 @@ public class dashboard extends AppCompatActivity {
     }
 
     private void setTransactionsList(){
-        String[] labels = {"Bananas", "Oranges", "Apples", "Bananas", "Oranges", "Apples", "Bananas", "Oranges", "Apples", "Bananas", "Oranges", "Apples"};
-        Double[] amounts = {11.11, -222.22, 3333.33, -11.11, 222.22, -3333.33, 11.11, -222.22, 3333.33, 11.11, -222.22, 3333.33};
+        for(int i = 0; i<transaction_label.size(); i++){
+            transactionsList.add(new transactions(Integer.parseInt(transaction_id.get(i)),
+                    transaction_label.get(i), Double.parseDouble(transaction_amount.get(i))));
+        }
+    }
 
-        for(int i = 0; i < labels.length; i++){
-            transactionsList.add(new transactions(labels[i], amounts[i]));
+    void storeDataInArrays(){
+        Cursor cursor = db.readAllDataFromTransactionsTable();
+
+        if (cursor.getCount() == 0){
+            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            while(cursor.moveToNext()){
+                transaction_id.add(cursor.getString(0));
+                transaction_label.add(cursor.getString(2));
+                transaction_amount.add(cursor.getString(3));
+            }
         }
     }
 
