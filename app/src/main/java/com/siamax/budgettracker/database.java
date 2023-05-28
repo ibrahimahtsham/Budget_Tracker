@@ -189,7 +189,6 @@ public class database extends SQLiteOpenHelper {
         Cursor cursor = null;
         if (db != null){
             cursor = db.rawQuery(queryGetAmountForUpdate, null);
-            cursor.moveToFirst();
         }
         return cursor;
     }

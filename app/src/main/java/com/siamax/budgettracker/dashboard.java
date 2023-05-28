@@ -197,6 +197,7 @@ public class dashboard extends AppCompatActivity {
         if (!(rs.getCount() == 0)){
             while(rs.moveToNext()){
                 Dbalance += rs.getDouble(0);
+                System.out.println(rs.getDouble(0));
                 if(rs.getDouble(0)>=0){
                     Dbudget += rs.getDouble(0);
                 }else{
