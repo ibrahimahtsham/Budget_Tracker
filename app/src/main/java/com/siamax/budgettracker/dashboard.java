@@ -2,6 +2,7 @@ package com.siamax.budgettracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -90,9 +92,9 @@ public class dashboard extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(dashboard.this,
-                        addTransaction.class);
+                Intent intent = new Intent(dashboard.this, addTransaction.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -206,9 +208,9 @@ public class dashboard extends AppCompatActivity {
             }
         }
 
-        balance.setText(Dbalance.toString());
-        budget.setText(Dbudget.toString());
-        expense.setText(Dexpense.toString());
+        balance.setText(String.format("%.2f", Dbalance));
+        budget.setText(String.format("%.2f", Dbudget));
+        expense.setText(String.format("%.2f", Dexpense));
 
     }
 

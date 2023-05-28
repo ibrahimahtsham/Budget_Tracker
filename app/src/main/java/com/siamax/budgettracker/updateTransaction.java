@@ -42,11 +42,11 @@ public class updateTransaction extends AppCompatActivity {
         int id = getIntent().getIntExtra("id", 0);
 
         String label = db.getLabelForUpdate(id);
-        int amount = db.getAmountForUpdate(id);
+        Double amount = db.getAmountForUpdate(id);
         String description = db.getDescriptionForUpdate(id);
 
         edit_labelInput.setText(label);
-        edit_amountInput.setText(amount+"");
+        edit_amountInput.setText(amount.toString());
         edit_descriptionInput.setText(description);
 
         updateTransactionBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +68,7 @@ public class updateTransaction extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(updateTransaction.this, dashboard.class);
                 startActivity(intent);
+                finish();
             }
         });
 

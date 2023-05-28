@@ -92,13 +92,15 @@ public class addTransaction extends AppCompatActivity {
 
                     database myDB = new database(addTransaction.this);
 
-                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt), "");
+                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt),
+                            "");
 
                 }
                 else if(!lblInpt.isEmpty() && !amtInpt.isEmpty() && !dscInpt.isEmpty()){
 
                     database myDB = new database(addTransaction.this);
-                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt), dscInpt);
+                    myDB.addTransaction(myDB.getUserIDForAK(), lblInpt, Double.parseDouble(amtInpt),
+                            dscInpt);
 
                 }
 
@@ -112,6 +114,7 @@ public class addTransaction extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(addTransaction.this, dashboard.class);
                 startActivity(intent);
+                finish();
             }
         });
 

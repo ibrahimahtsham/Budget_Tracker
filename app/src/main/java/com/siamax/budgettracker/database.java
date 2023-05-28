@@ -72,7 +72,8 @@ public class database extends SQLiteOpenHelper {
         long result = db.insert(TRANSACTIONS_TABLE, null, contentValues);
         if (result == -1) {
             System.out.println(result);
-            Toast.makeText(context, "Failed to put transaction in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to put transaction in database", Toast.LENGTH_SHORT)
+                    .show();
         }else{
             Toast.makeText(context, "Successfully added", Toast.LENGTH_SHORT).show();
         }
@@ -92,7 +93,8 @@ public class database extends SQLiteOpenHelper {
                 COLUMN_TRANSACTION_ID + "=?", new String[]{id+""});
         if (result == -1) {
             System.out.println(result);
-            Toast.makeText(context, "Failed to update transaction in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to update transaction in database",
+                    Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(context, "Successfully updated", Toast.LENGTH_SHORT).show();
         }
@@ -108,9 +110,11 @@ public class database extends SQLiteOpenHelper {
         long result = db.insert(USER_TABLE, null, contentValues);
         if (result == -1) {
             System.out.println(result);
-            Toast.makeText(context, "Failed to put user in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to put user in database", Toast.LENGTH_SHORT)
+                    .show();
         }else{
-            Toast.makeText(context, "Added user to database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Added user to database", Toast.LENGTH_SHORT)
+                    .show();
         }
 
     }
@@ -148,7 +152,8 @@ public class database extends SQLiteOpenHelper {
 
     Cursor readAllDataFromTransactionsTable(){
 
-        String queryReadDataFromTransactionsTable = "SELECT * FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_USER_ID_AK + " = " + getUserIDForAK() + ";";
+        String queryReadDataFromTransactionsTable = "SELECT * FROM " + TRANSACTIONS_TABLE
+                + " WHERE " + COLUMN_TRANSACTION_USER_ID_AK + " = " + getUserIDForAK() + ";";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -159,17 +164,20 @@ public class database extends SQLiteOpenHelper {
     }
 
     String getLabelForUpdate(int id){
-        String queryGetLabelForUpdate = "SELECT "+ COLUMN_TRANSACTION_LABEL +" FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
+        String queryGetLabelForUpdate = "SELECT "+ COLUMN_TRANSACTION_LABEL +" FROM "
+                + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor resultSet = db.rawQuery(queryGetLabelForUpdate, null);
         resultSet.moveToFirst();
 
-        return resultSet.getString(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_LABEL)).toString();
+        return resultSet.getString(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_LABEL))
+                .toString();
     }
-    int getAmountForUpdate(int id){
-        String queryGetAmountForUpdate = "SELECT "+ COLUMN_TRANSACTION_AMOUNT +" FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
+    double getAmountForUpdate(int id){
+        String queryGetAmountForUpdate = "SELECT "+ COLUMN_TRANSACTION_AMOUNT +" FROM "
+                + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -194,19 +202,22 @@ public class database extends SQLiteOpenHelper {
     }
 
     String getDescriptionForUpdate(int id){
-        String queryGetDescriptionForUpdate = "SELECT "+ COLUMN_TRANSACTION_DESCRIPTION +" FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
+        String queryGetDescriptionForUpdate = "SELECT "+ COLUMN_TRANSACTION_DESCRIPTION
+                + " FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor resultSet = db.rawQuery(queryGetDescriptionForUpdate, null);
         resultSet.moveToFirst();
 
-        return resultSet.getString(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_DESCRIPTION)).toString();
+        return resultSet.getString(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_DESCRIPTION))
+                .toString();
     }
 
 
     void deleteTransaction(int index){
-        String queryDeleteTransaction = "DELETE FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + index + ";";
+        String queryDeleteTransaction = "DELETE FROM " + TRANSACTIONS_TABLE
+                + " WHERE " + COLUMN_TRANSACTION_ID + " = " + index + ";";
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL(queryDeleteTransaction);
@@ -225,7 +236,8 @@ public class database extends SQLiteOpenHelper {
         long result = db.insert(TRANSACTIONS_TABLE, null, contentValues);
         if (result == -1) {
             System.out.println(result);
-            Toast.makeText(context, "Failed to put transaction in database", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to put transaction in database",
+                    Toast.LENGTH_SHORT).show();
         }
 //        else{
 //            Toast.makeText(context, "Successfully added", Toast.LENGTH_SHORT).show();

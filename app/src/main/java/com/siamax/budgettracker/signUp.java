@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class signUp extends AppCompatActivity {
     EditText userName;
     EditText password;
     Button signUpButton;
+    ImageButton closeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +51,13 @@ public class signUp extends AppCompatActivity {
                 String pPass = preferences.getString("password", "");
 
                 if (user.equals("") ||  pass.equals("")){
-                    Toast.makeText(signUp.this, "Username or Password can't be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(signUp.this, "Username or Password can't be empty",
+                            Toast.LENGTH_SHORT).show();
                 }
 
                 else if (pUser.equals(user)) {
-                    Toast.makeText(signUp.this, "User already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(signUp.this, "User already exists",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else{
                     SharedPreferences.Editor editor = preferences.edit();
@@ -79,6 +83,17 @@ public class signUp extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        closeBtn = (ImageButton) findViewById(R.id.signup_closeBtn);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(signUp.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
