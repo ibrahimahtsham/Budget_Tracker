@@ -122,7 +122,7 @@ public class database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String queryCheckIfUserInDB = "SELECT " + COLUMN_USER_NAME + " FROM " + USER_TABLE +
-                " WHERE " + COLUMN_USER_NAME + " = " + pUser + ";";
+                " WHERE " + COLUMN_USER_NAME + " LIKE '" + pUser + "';";
 
         Cursor resultSet = db.rawQuery(queryCheckIfUserInDB, null);
 
@@ -138,7 +138,7 @@ public class database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String queryGetUserIDForAK = "SELECT " + COLUMN_USER_ID + " FROM " + USER_TABLE +
-                " WHERE " + COLUMN_USER_NAME + " = " + pUser + ";";
+                " WHERE " + COLUMN_USER_NAME + " LIKE '" + pUser + "';";
 
         Cursor resultSet = db.rawQuery(queryGetUserIDForAK, null);
         resultSet.moveToFirst();

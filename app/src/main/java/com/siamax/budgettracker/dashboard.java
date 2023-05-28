@@ -3,23 +3,29 @@ package com.siamax.budgettracker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class dashboard extends AppCompatActivity {
-
-    TextView welcomeText;
     FloatingActionButton addBtn;
+
+    Button logoutButton;
 
     TextView balance;
     TextView budget;
@@ -27,6 +33,9 @@ public class dashboard extends AppCompatActivity {
 
     database db;
     ArrayList<String> transaction_id, transaction_label, transaction_amount;
+
+    transactionsRecyclerViewAdapter adapter;
+    RecyclerView recyclerView;
 
 
     ArrayList<transactions> transactionsList = new ArrayList<>();
@@ -36,6 +45,17 @@ public class dashboard extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+
+        logoutButton = (Button) findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(dashboard.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         db = new database(dashboard.this);
         transaction_id = new ArrayList<>();
@@ -65,11 +85,11 @@ public class dashboard extends AppCompatActivity {
         budget.setText(Dbudget.toString());
         expense.setText(Dexpense.toString());
 
-        RecyclerView recyclerView = findViewById(R.id.recycleview);
+        recyclerView = findViewById(R.id.recycleview);
 
         setTransactionsList();
 
-        transactionsRecyclerViewAdapter adapter = new transactionsRecyclerViewAdapter(this,
+        adapter = new transactionsRecyclerViewAdapter(this,
                 transactionsList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,20 +97,56 @@ public class dashboard extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         String user = preferences.getString("userName", "");
 
-        welcomeText = (TextView) findViewById(R.id.welcomeText);
-        welcomeText.setText("Welcome "+user+"!");
+        logoutButton.setText("Logout " + user);
 
         addBtn = (FloatingActionButton) findViewById(R.id.addBtn);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(dashboard.this, addTransaction.class);
+                Intent intent = new Intent(dashboard.this,
+                        addTransaction.class);
                 startActivity(intent);
             }
         });
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
+
+    transactions deletedTransaction = null;
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView,
+                              @NonNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            System.out.println(transactionsList.get(viewHolder.getAdapterPosition()).getId());
+            int position = transactionsList.get(viewHolder.getAdapterPosition()).getId() - 1;
+
+            deletedTransaction = transactionsList.get(position);
+
+            transactionsList.remove(position);
+            adapter.notifyItemRemoved(position);
+
+            Snackbar.make(recyclerView, deletedTransaction.getLabel() + " Deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            transactionsList.add(position, deletedTransaction);
+                            adapter.notifyItemInserted(position);
+                        }
+                    }).setTextColor(Color.parseColor("#E53935"))
+                    .setActionTextColor(Color.parseColor("#43A047")).show();
+        }
+    };
 
     private void setTransactionsList(){
         for(int i = 0; i<transaction_label.size(); i++){

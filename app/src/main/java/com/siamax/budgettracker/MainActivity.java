@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         if(!preferences.getString("userName", "").equals("")){
-            signUpButton.setText("Reset");
+            signUpButton.setText("Switch User");
         }
 
         loginButton.setOnClickListener(new View.OnClickListener(){

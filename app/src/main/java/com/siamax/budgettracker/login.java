@@ -47,6 +47,7 @@ public class login extends AppCompatActivity {
                     if (user.equals(pUser) && pass.equals(pPass)){
                         Intent intent = new Intent(login.this, dashboard.class);
                         startActivity(intent);
+                        finish();
                     }else{
                         Toast.makeText(login.this, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
                     }

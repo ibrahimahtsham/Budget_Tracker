@@ -32,8 +32,8 @@ public class signUp extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         if(!preferences.getString("userName", "").equals("")){
-            signUpButton.setText("Reset");
-            labelView.setText("Reset User");
+            signUpButton.setText("Switch");
+            labelView.setText("Switch User");
             userName.setHint("New Username");
             password.setHint("New Password");
         }
@@ -63,16 +63,19 @@ public class signUp extends AppCompatActivity {
                     editor.putString("password", pass);
                     editor.apply();
 
-                    Intent intent = new Intent(signUp.this, dashboard.class);
-                    startActivity(intent);
-
                     database db = new database(signUp.this);
 
-                    if (db.checkIfUserExistInDB()){
+                    Intent intent = new Intent(signUp.this, dashboard.class);
+                    startActivity(intent);
+                    finish();
 
+                    if (db.checkIfUserExistInDB()){
+                        return;
                     }else{
                         db.addUser(user);
                     }
+
+
 
                 }
 
