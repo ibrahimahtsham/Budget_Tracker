@@ -4,11 +4,13 @@ public class transactions {
     int id;
     String label;
     Double amount;
+    String description;
 
-    public transactions(int id, String label, Double amount) {
+    public transactions(int id, String label, Double amount, String description) {
         this.id = id;
         this.label = label;
         this.amount = amount;
+        this.description = description;
     }
 
     public String getLabel() {
@@ -22,4 +24,6 @@ public class transactions {
     public int getId() {
         return id;
     }
+
+    public String getDescription() { return description; }
 }

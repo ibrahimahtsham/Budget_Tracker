@@ -32,7 +32,7 @@ public class dashboard extends AppCompatActivity {
     TextView expense;
 
     database db;
-    ArrayList<String> transaction_id, transaction_label, transaction_amount;
+    ArrayList<String> transaction_id, transaction_label, transaction_amount, transaction_description;
 
     transactionsRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -61,6 +61,7 @@ public class dashboard extends AppCompatActivity {
         transaction_id = new ArrayList<>();
         transaction_label = new ArrayList<>();
         transaction_amount = new ArrayList<>();
+        transaction_description = new ArrayList<>();
 
         balance = (TextView) findViewById(R.id.balance);
         budget = (TextView) findViewById(R.id.budget);
@@ -68,22 +69,7 @@ public class dashboard extends AppCompatActivity {
 
         storeDataInArrays();
 
-        Double Dbudget = 0.0;
-        Double Dexpense = 0.0;
-        Double Dbalance = 0.0;
-
-        for(int i = 0; i < transaction_amount.size(); i++){
-            Dbalance += Double.parseDouble(transaction_amount.get(i));
-            if(Double.parseDouble(transaction_amount.get(i))>=0){
-                Dbudget += Double.parseDouble(transaction_amount.get(i));
-            }else{
-                Dexpense += Double.parseDouble(transaction_amount.get(i));
-            }
-        }
-
-        balance.setText(Dbalance.toString());
-        budget.setText(Dbudget.toString());
-        expense.setText(Dexpense.toString());
+        refreshBalance();
 
         recyclerView = findViewById(R.id.recycleview);
 
@@ -128,30 +114,40 @@ public class dashboard extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            System.out.println(transactionsList.get(viewHolder.getAdapterPosition()).getId());
-            int position = transactionsList.get(viewHolder.getAdapterPosition()).getId() - 1;
+
+            int position = viewHolder.getAdapterPosition();
 
             deletedTransaction = transactionsList.get(position);
 
+            deleteFromDB(position);
             transactionsList.remove(position);
             adapter.notifyItemRemoved(position);
 
-            Snackbar.make(recyclerView, deletedTransaction.getLabel() + " Deleted", Snackbar.LENGTH_LONG)
+            refreshBalance();
+
+
+            Snackbar.make(recyclerView, deletedTransaction.getLabel() + " Deleted",
+                            Snackbar.LENGTH_SHORT)
                     .setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             transactionsList.add(position, deletedTransaction);
+                            redoTransactionInDB(position);
                             adapter.notifyItemInserted(position);
+
+                            refreshBalance();
                         }
                     }).setTextColor(Color.parseColor("#E53935"))
                     .setActionTextColor(Color.parseColor("#43A047")).show();
+
         }
     };
 
     private void setTransactionsList(){
         for(int i = 0; i<transaction_label.size(); i++){
             transactionsList.add(new transactions(Integer.parseInt(transaction_id.get(i)),
-                    transaction_label.get(i), Double.parseDouble(transaction_amount.get(i))));
+                    transaction_label.get(i), Double.parseDouble(transaction_amount.get(i)),
+                    transaction_description.get(i)));
         }
     }
 
@@ -166,8 +162,51 @@ public class dashboard extends AppCompatActivity {
                 transaction_id.add(cursor.getString(0));
                 transaction_label.add(cursor.getString(2));
                 transaction_amount.add(cursor.getString(3));
+                transaction_description.add(cursor.getString(4));
             }
         }
+    }
+
+    void deleteFromDB(int position){
+
+        database db = new database(dashboard.this);
+        db.readAllDataFromTransactionsTable();
+
+        int index = transactionsList.get(position).getId();
+
+        db.deleteTransaction(index);
+
+    }
+
+    void redoTransactionInDB(int position){
+
+        database db = new database(dashboard.this);
+        db.redoTransaction(transactionsList.get(position).getLabel(),
+                transactionsList.get(position).getAmount(),
+                transactionsList.get(position).getDescription());
+    }
+
+    void refreshBalance(){
+        Double Dbudget = 0.0;
+        Double Dexpense = 0.0;
+        Double Dbalance = 0.0;
+
+        database db = new database(dashboard.this);
+
+        for(int i = 1; i < db.getSizeOfTransactions()+1; i++){
+            Dbalance += db.getAmountForRefresh();
+            System.out.println(db.getAmountForRefresh());
+            if(db.getAmountForRefresh()>=0){
+                Dbudget += db.getAmountForRefresh();
+            }else{
+                Dexpense += db.getAmountForRefresh();
+            }
+        }
+
+        balance.setText(Dbalance.toString());
+        budget.setText(Dbudget.toString());
+        expense.setText(Dexpense.toString());
+
     }
 
 }

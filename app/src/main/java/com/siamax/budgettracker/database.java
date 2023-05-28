@@ -178,6 +178,20 @@ public class database extends SQLiteOpenHelper {
 
         return resultSet.getInt(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_AMOUNT));
     }
+
+    int getAmountForRefresh(){
+        String queryGetAmountForUpdate = "SELECT "+ COLUMN_TRANSACTION_AMOUNT +" FROM " +
+                TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_USER_ID_AK + " = " +
+                getUserIDForAK() + ";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor resultSet = db.rawQuery(queryGetAmountForUpdate, null);
+        resultSet.moveToFirst();
+
+        return resultSet.getInt(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_AMOUNT));
+    }
+
     String getDescriptionForUpdate(int id){
         String queryGetDescriptionForUpdate = "SELECT "+ COLUMN_TRANSACTION_DESCRIPTION +" FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id + ";";
 
@@ -187,6 +201,45 @@ public class database extends SQLiteOpenHelper {
         resultSet.moveToFirst();
 
         return resultSet.getString(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_DESCRIPTION)).toString();
+    }
+
+
+    void deleteTransaction(int index){
+        String queryDeleteTransaction = "DELETE FROM " + TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + index + ";";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(queryDeleteTransaction);
+    }
+
+    void redoTransaction(String transaction_label,
+                         Double transaction_amount, String transaction_description){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COLUMN_TRANSACTION_USER_ID_AK, getUserIDForAK());
+        contentValues.put(COLUMN_TRANSACTION_LABEL, transaction_label);
+        contentValues.put(COLUMN_TRANSACTION_AMOUNT, transaction_amount);
+        contentValues.put(COLUMN_TRANSACTION_DESCRIPTION, transaction_description);
+
+        long result = db.insert(TRANSACTIONS_TABLE, null, contentValues);
+        if (result == -1) {
+            System.out.println(result);
+            Toast.makeText(context, "Failed to put transaction in database", Toast.LENGTH_SHORT).show();
+        }
+//        else{
+//            Toast.makeText(context, "Successfully added", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    int getSizeOfTransactions(){
+
+        SQLiteDatabase db = getReadableDatabase();
+        String queryGetSizeOfTransactions = "SELECT * FROM " + TRANSACTIONS_TABLE +
+                " WHERE " + COLUMN_TRANSACTION_USER_ID_AK + " = " + getUserIDForAK() + ";";
+
+        Cursor resultSet = db.rawQuery(queryGetSizeOfTransactions, null);
+        return resultSet.getCount();
+
     }
 
 }
