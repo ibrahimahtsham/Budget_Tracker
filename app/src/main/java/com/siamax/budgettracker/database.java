@@ -179,17 +179,19 @@ public class database extends SQLiteOpenHelper {
         return resultSet.getInt(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_AMOUNT));
     }
 
-    int getAmountForRefresh(){
+    Cursor getAmountForRefresh(){
         String queryGetAmountForUpdate = "SELECT "+ COLUMN_TRANSACTION_AMOUNT +" FROM " +
                 TRANSACTIONS_TABLE + " WHERE " + COLUMN_TRANSACTION_USER_ID_AK + " = " +
                 getUserIDForAK() + ";";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor resultSet = db.rawQuery(queryGetAmountForUpdate, null);
-        resultSet.moveToFirst();
-
-        return resultSet.getInt(resultSet.getColumnIndexOrThrow(COLUMN_TRANSACTION_AMOUNT));
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(queryGetAmountForUpdate, null);
+            cursor.moveToFirst();
+        }
+        return cursor;
     }
 
     String getDescriptionForUpdate(int id){

@@ -192,14 +192,16 @@ public class dashboard extends AppCompatActivity {
         Double Dbalance = 0.0;
 
         database db = new database(dashboard.this);
+        Cursor rs = db.getAmountForRefresh();
 
-        for(int i = 1; i < db.getSizeOfTransactions()+1; i++){
-            Dbalance += db.getAmountForRefresh();
-            System.out.println(db.getAmountForRefresh());
-            if(db.getAmountForRefresh()>=0){
-                Dbudget += db.getAmountForRefresh();
-            }else{
-                Dexpense += db.getAmountForRefresh();
+        if (!(rs.getCount() == 0)){
+            while(rs.moveToNext()){
+                Dbalance += rs.getDouble(0);
+                if(rs.getDouble(0)>=0){
+                    Dbudget += rs.getDouble(0);
+                }else{
+                    Dexpense += rs.getDouble(0);
+                }
             }
         }
 
