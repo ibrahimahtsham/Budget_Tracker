@@ -46,7 +46,7 @@ public class transactionsRecyclerViewAdapter extends
                                  int position) {
 
         holder.label.setText(transactionsList.get(position).getLabel());
-        holder.amount.setText(transactionsList.get(position).getAmount()+"$");
+        holder.amount.setText(transactionsList.get(position).getAmount()+" PKR");
         if(transactionsList.get(position).getAmount()>=0){
             holder.amount.setTextColor(ContextCompat.getColor(context, R.color.green));
         }else{

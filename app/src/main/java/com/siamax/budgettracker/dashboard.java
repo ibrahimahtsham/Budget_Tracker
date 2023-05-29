@@ -208,9 +208,9 @@ public class dashboard extends AppCompatActivity {
             }
         }
 
-        balance.setText(String.format("%.2f", Dbalance));
-        budget.setText(String.format("%.2f", Dbudget));
-        expense.setText(String.format("%.2f", Dexpense));
+        balance.setText(String.format("%.2f", Dbalance) + " PKR");
+        budget.setText(String.format("%.2f", Dbudget) + " PKR");
+        expense.setText(String.format("%.2f", Dexpense) + " PKR");
 
     }
 
