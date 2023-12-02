@@ -1,5 +1,6 @@
 # Budget_Tracker
 1,093 lines of code in BudgetTracker\app\src\main\java\com\siamax\budgettracker
+
 i do a little semester project and create android app in java for budget tracker app
 Screenshots of screens:
 ### splash screen
